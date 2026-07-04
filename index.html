@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة HAF 🥑 الغذائية الإلكترونية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --haf-green: #2d5a27; --haf-gold: #d4af37; --bg: #fdfbf7; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; color: #333; overflow-x: hidden; }
+        
+        /* 1. اللوجو */
+        .header-logo { text-align: center; padding: 20px; position: relative; }
+        .header-logo img { max-width: 100%; height: auto; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        /* زر تبديل اللغة */
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--haf-green);
+            color: white;
+            border: 2px solid var(--haf-gold);
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.3s;
+            z-index: 100;
+        }
+        .lang-switcher:hover {
+            background: var(--haf-gold);
+            color: var(--haf-green);
+        }
+        html[dir="ltr"] .lang-switcher {
+            left: auto;
+            right: 20px;
+        }
+
+        /* تنسيق أزرار النتائج */
+        .results-buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 10px 20px 25px 20px;
+        }
+        .btn-result {
+            flex: 1;
+            max-width: 180px;
+            padding: 12px 10px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            transition: 0.3s;
+            animation: softPulse 2.5s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .btn-girls { background: #fff; color: #e1306c; border: 2px solid #e1306c; }
+        .btn-boys { background: #fff; color: var(--haf-green); border: 2px solid var(--haf-green); }
+        
+        @keyframes softPulse {
+            0% { transform: scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+            50% { transform: scale(1.03); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+            100% { transform: scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        }
+
+        .main-title { text-align: center; color: var(--haf-green); font-size: 24px; font-weight: 900; margin: 20px; }
+
+        #welcome-personal-msg { display: none; text-align: center; color: var(--haf-gold); font-size: 20px; font-weight: 900; background: white; padding: 15px; margin: 10px auto; width: 80%; border-radius: 15px; border: 2px dashed var(--haf-green); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        .pulse-container { text-align: center; margin: 30px 0; }
+        .btn-pulse {
+            background: var(--haf-green); color: white; border: none; padding: 20px 30px;
+            border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 0 0 0 rgba(45, 90, 39, 0.7); animation: pulse 2s infinite; text-decoration: none; display: inline-block;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 90, 39, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(45, 90, 39, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 90, 39, 0); }
+        }
+
+        .slider { width: 90%; max-width: 600px; margin: 20px auto; position: relative; overflow: hidden; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .slides { display: flex; transition: transform 0.8s ease-in-out; }
+        .slide { min-width: 100%; }
+        .slide img { width: 100%; display: block; }
+
+        .ticker-wrap { background: var(--haf-green); color: white; padding: 10px 0; overflow: hidden; white-space: nowrap; margin: 20px 0; }
+        .ticker { display: inline-block; animation: ticker 30s linear infinite; font-weight: bold; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        .features { padding: 20px; background: white; margin: 20px; border-radius: 20px; border-right: 6px solid var(--haf-gold); text-align: right; }
+        html[dir="ltr"] .features { border-right: none; border-left: 6px solid var(--haf-gold); text-align: left; }
+        .features ul { list-style: none; padding: 0; }
+        .features li { padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; }
+        .features li::before { content: "✅ "; }
+
+        .social-section { text-align: center; padding: 20px; }
+        .social-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 15px; }
+        .social-btn { padding: 10px 20px; border-radius: 10px; color: white; text-decoration: none; font-size: 14px; font-weight: bold; }
+
+        #registration-page, #services-page { display: none; padding: 20px; text-align: center; }
+        .form-input { width: 90%; max-width: 300px; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #ccc; font-family: 'Cairo'; }
+
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; font-weight: bold; }
+
+        .haf-main-platform { max-width: 900px; margin: 0 auto; background: #f9f9f9; padding: 15px; border-radius: 25px; text-align: right; }
+        html[dir="ltr"] .haf-main-platform { text-align: left; }
+        .haf-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .haf-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; text-decoration: none !important; display: flex; flex-direction: column; border: 1px solid #eee; }
+        .haf-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: #d4af37; }
+        .haf-card img { width: 100%; height: 150px; object-fit: cover; display: block; }
+        .haf-card-title { padding: 12px; text-align: center; color: #2d5a27; font-weight: 900; font-size: 14px; background: #fff; flex-grow: 1; display: flex; align-items: center; justify-content: center; line-height: 1.4; }
+        @media (max-width: 480px) { .haf-grid { gap: 10px; } .haf-card img { height: 120px; } .haf-card-title { font-size: 12px; } }
+
+        /* تنسيقات الـ Footer المضافة */
+        .footer-container { background-color: #333; color: #fff; padding: 40px 20px; text-align: center; margin-top: 50px; font-family: 'Segoe UI', sans-serif; }
+        .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; }
+        .footer-links a { color: #ddd; text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .footer-links a:hover { color: #558B2F; }
+        .footer-copyright { font-size: 12px; color: #888; border-top: 1px solid #555; padding-top: 20px; }
+
+        .ads-rotator-container { position: relative; max-width: 728px; margin: 15px auto; overflow: hidden; border-radius: 4px; border: 1px solid #e0e0e0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); background: #fff; }
+        .ad-item { display: none; width: 100%; animation: fadeInAd 0.5s ease-in-out; }
+        .ad-item.active { display: block; }
+        @keyframes fadeInAd { from { opacity: 0; } to { opacity: 1; } }
+
+        .ads-header-tag { display: flex; align-items: center; justify-content: flex-start; gap: 4px; background: #fafafa; padding: 2px 10px; border-bottom: 1px solid #f0f0f0; }
+        .ads-header-tag span { font-size: 10px; color: #777; }
+        .ads-container-link { text-decoration: none !important; display: block; color: inherit; }
+        .ads-content-wrapper { display: flex; align-items: center; padding: 8px 12px; height: 90px; box-sizing: border-box; gap: 15px; }
+        .ads-image-area { width: 74px; height: 74px; flex-shrink: 0; }
+        .ads-image-area img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
+        .ads-text-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .ads-title { margin: 0 0 4px 0; font-size: 16px; font-weight: 700; color: #1a0dab; direction: rtl; text-align: right; }
+        html[dir="ltr"] .ads-title { direction: ltr; text-align: left; }
+        .ads-description { margin: 0; font-size: 13px; color: #4d5156; line-height: 1.4; direction: rtl; text-align: right; }
+        html[dir="ltr"] .ads-description { direction: ltr; text-align: left; }
+        .ads-btn { display: inline-block; background-color: #1a73e8; color: white !important; padding: 8px 16px; font-size: 13px; font-weight: bold; border-radius: 20px; text-align: center; }
+        @media (max-width: 600px) {
+            .ads-content-wrapper { height: auto; flex-wrap: wrap; padding: 12px; gap: 10px; }
+            .ads-image-area { width: 60px; height: 60px; }
+            .ads-text-area { width: calc(100% - 80px); }
+            .ads-button-area { width: 100%; text-align: center; }
+            .ads-btn { width: 100%; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body onload="initPage()">
+
+<div id="loading" class="loading-overlay">Saving your data in HAF... 🥑</div>
+
+<div id="home-page">
+    <div class="header-logo">
+        <button class="lang-switcher" onclick="toggleLanguage()" id="lang-btn">العربية</button>
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgreaYelmciZE2u9qcWXtNIBIDol4D3vCiVtKv56jEtN05nx3PF9cU1u4dB259ZiS0CYf0b3WuO8VDhMlAakbPn15l3wfauSxLAj71_O_4DGD1NQ7L0o7fls_VAZcIFPMXaVpQ3T4A9AiJP_0FSdk9NUcjwKw4-P3aS-z4hbXsyQ8TD7LP7udQtb20cg6M/s600/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٣_%D٩%A٠%D٩%A٧%D٩%A٠%D٩%A٢%D٩%A٢%D٩%A٤.png">
+    </div>
+
+    <div class="results-buttons-container">
+        <a href="https://fitness0080.blogspot.com/p/haf-root-haf-gold-d4af37-haf-green.html" class="btn-result btn-girls" id="text-girls-results">🌸 Heroines Results</a>
+        <a href="https://fitness0080.blogspot.com/p/haf-root-haf-green-2d5a27-haf-gold.html" class="btn-result btn-boys" id="text-boys-results">🏆 Heroes Results</a>
+    </div>
+
+    <div id="haf-mega-advice" style="font-family: 'Cairo', sans-serif; direction: ltr; margin: 20px auto; max-width: 500px;">
+        <style>
+            .advice-card { background: linear-gradient(135deg, #2d5a27 0%, #1a3617 100%); border-radius: 25px; padding: 25px; color: white; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); border: 2px solid #d4af37; position: relative; transition: 0.4s; }
+            .advice-tag { color: #d4af37; font-size: 12px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 15px; display: block; }
+            #advice-content { font-size: 18px; font-weight: bold; line-height: 1.7; display: block; min-height: 80px; margin-bottom: 20px; }
+            .share-btn { background: #d4af37; color: #2d5a27 !important; border: none; padding: 10px 20px; border-radius: 50px; font-weight: 900; cursor: pointer; font-size: 13px; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+            .haf-watermark { position: absolute; left: 15px; top: 15px; font-size: 40px; opacity: 0.15; pointer-events: none; }
+        </style>
+        <div class="advice-card">
+            <span class="haf-watermark">🥑</span>
+            <span class="advice-tag" id="text-capsule">💡 HAF Knowledge Capsule</span>
+            <span id="advice-content">Loading your advice...</span>
+            <button class="share-btn" onclick="copyAdvice()"><span id="text-share-btn">🔗 Share Advice</span></button>
+        </div>
+    </div>
+
+<div class="ads-rotator-container">
+  <div class="ads-header-tag">
+    <span id="text-ad-tag">Sponsored Ad</span>
+    <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+      <path d="M6 1a5 5 0 100 10A5 5 0 006 1zm.5 7.5h-1v-3h1v3zm0-4h-1v-1h1v1z" fill="#999"/>
+    </svg>
+  </div>
+
+  <div class="ad-item active">
+    <a href="https://t.me/Telebooksss" target="_blank" class="ads-container-link">
+      <div class="ads-content-wrapper">
+        <div class="ads-image-area">
+          <img alt="Telebooks" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj7KVQcQRwEL33bU94O0WFPPPPnLyBXSjKKek2r_eUkanW6uRmarjclrZc8Lq4lyOaEF62nZoSwM-ixciS8z4K81wRYsbRL1TjH42Ha8M8KngaSmdfOXIWSrWVtgUh2u-pL565XmhOEWWLElxEUpR-jNrgCLxNUXsx_C69Eap7SFrH2tHhg2-0ghgfHA_Ke/s600/IMG-20260505-WA0008.jpg"/>
+        </div>
+        <div class="ads-text-area">
+          <h3 class="ads-title">Telebooks</h3>
+          <p class="ads-description" id="ad-desc-1">Join a diverse library of free electronic books</p>
+        </div>
+        <div class="ads-button-area">
+          <span class="ads-btn" id="ad-btn-1">Click here to go to the library</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="ad-item">
+    <a href="https://whatsapp.com/channel/0029VaCTBKEKAwEolzQETH1i" target="_blank" class="ads-container-link">
+      <div class="ads-content-wrapper">
+        <div class="ads-image-area">
+          <img alt="أمل بوتيك" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhSBMFGpGqv05MH22K2Sb7AMNjji8Jp-p_8_xbHIp7rQQvFvy_tGQedwnBBR61e7_E-nnCOUBVWQK9ajDAFmBMW4l3qAo8kuW28mvkMReZaaGETTr_gsrrt9ZcXajz8aQKQcX1BflDtbJf0soB0Z_BFwnpWFVBKaXGISfXc3OiH1lQG9xAwn9Yr5PtwrJdf/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٥%D٩%A٠%D٩%A٧_%D٩%A٠%D٩%A٧%D٩%A٣%D٩%A٣%D٩%A٤%D٩%A٣.jpg"/>
+        </div>
+        <div class="ads-text-area">
+          <h3 class="ads-title" id="ad-title-2">Amal Boutique for E-Shopping</h3>
+          <p class="ads-description" id="ad-desc-2">A service that suits you</p>
+        </div>
+        <div class="ads-button-area">
+          <span class="ads-btn" id="ad-btn-2">Click here to move to the boutique</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+<h1 class="main-title" id="text-main-title">Welcome to HAF 🥑 Electronic Nutrition World</h1>
+    <div id="welcome-personal-msg"></div>
+
+    <div class="pulse-container" id="services-btn-container">
+        <button class="btn-pulse" onclick="showServicesPage()" id="text-services-btn">Access Your Services 📲</button>
+    </div>
+
+    <div class="pulse-container" id="reg-btn-container">
+        <button class="btn-pulse" onclick="goToRegistration()" id="text-reg-btn" style="background:#d4af37; color:#2d5a27;">Join HAF 🥑 Family</button>
+    </div>
+
+    <div class="slider">
+        <div class="slides" id="slides">
+            <div class="slide"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiqayNESjjh_1gRxicOJzVrP2PdU1XiViZGg5tOuVIFqn04xSnl0iwz6BCPgrjydJEMp_JXT88DuvL14LCIL6kE_yU8RNsykRK9dxC2yEklBxVSeQ28KANc_c19ZqsOKbqQTWoJd-Q0p1Z7A3C0CyquB-GVOSym_34g_8-ZftEj7UocT8CrSKJrxtqktzs/s600/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٥_%D٩%A٠%D٩%A٨%D٩%A١%D٩%A٧%D٩%A٥%D٩%A٣.jpg"></div>
+            <div class="slide"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVbSsSuH4825wDhyQWMS_xJqeH9Qjb0DzZFuF5CUPMvnKBAdaa1TcrGrlicG5EKR0lsYAM9V3X2xpsiaa2CnfbPn8fPJkl10K45w0BQu6aMIprZUYyY9SJZvOL38fsBuFCLWNX22vh2LDPgoDu8mXLQD3Eh7hf8X2Oeefx2lJt8vXf1tGTCAm6hf9omsg/s600/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٥_%D٩%A٠%D٩%A٨%D٩%A٢%D٩%A٨%D٩%A٣%D٩%A٢.jpg"></div>
+            <div class="slide"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg7DYncVTW8l9ghw0keZVgooCgNKmdCpDJFoaS4YFThSDch5Nfasa1Sh4tHX8Yl-tpNwNd3yAxIy6pxZTy2K2wGqQl2E5JqTMP92tNHcm1cV7qK56WDfDMFvBivSnaXV32C-hB3qxhqFRw1iW1a-bfcEi5XKjlJYzEUOeWKFwi4Ckp56wP_zyuNY8Jp59A/s600/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٥_%D٩%A٠%D٩%A٨%D٩%A٢%D٩%A٠%D٩%A١%D٩%A٨.jpg"></div>
+            <div class="slide"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjpmaG_vOvJwzJMPMrQznAEIpmwNGJoU_M0dtqNXxkR_dQhfgVc-bXq-7CRkNVZUKOOLnMg7otI9f2SlCrdHLnaPm2rgc7-nxLFfVo1q5I_KpjEPn10ivFFxgXZ743wFXpYr6RTKa2hQ_KBF-H4y5efYG6IT1dCEtIwfQr_Vigtc5rhptyVNIIgZnfP5Us/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٥_%D٩%A٠%D٩%A٨%D٩%A٢%D٩%A٤%D٩%A٠%D٩%A٥.jpg"></div>
+        </div>
+    </div>
+
+    <div class="ticker-wrap">
+        <div class="ticker" id="text-ticker">HAF 🥑 Nutrition Platform is the first electronic nutrition platform in Yemen .. HAF 🥑 .. Diverse electronic nutritional services 📲 .. HAF 🥑 .. Healthy life and perfect weight at the push of a button 📲 .. HAF 🥑 .. HAF 🥑 Library puts nutritional knowledge in your hands .. HAF 🥑 .. Home sports made easy with HAF 🥑 store 🛒 .. HAF 🥑 .. HAF 🥑 Electronic services 📲</div>
+    </div>
+
+    <div class="features">
+        <h4 id="text-features-heading">Features of HAF 🥑 Nutrition Platform 📲:</h4>
+        <ul id="text-features-list">
+            <li>HAF 🥑 Nutritional Calculator App 📲</li>
+            <li>HAF 🥑 Online Sports Store 🏆</li>
+            <li>HAF 🥑 Library for Nutritional Knowledge</li>
+            <li>Providing nutritional info since February 1, 2023</li>
+            <li>HAF 🥑 Nutrition Platform Blog on Google</li>
+            <li>The first electronic nutrition platform with modern features</li>
+            <li>Electronic follow-up page for HAF 🥑 clients</li>
+            <li>Advanced registration page</li>
+            <li>HAF 🥑 Nutrition website provides services at the click of a button</li>
+        </ul>
+    </div>
+
+    <div class="social-section">
+        <h3 id="text-social-heading">Follow us on all social media platforms</h3>
+        <div class="social-btns">
+            <a href="https://whatsapp.com/channel/0029VbBAPAjKbYMJMXZ4KF1z" class="social-btn" style="background:#25D366" id="sm-wa">WhatsApp</a>
+            <a href="https://www.youtube.com/@dr.haf0" class="social-btn" style="background:#FF0000" id="sm-yt">YouTube</a>
+            <a href="https://t.me/HAF_2026" class="social-btn" style="background:#0088cc" id="sm-tg">Telegram</a>
+            <a href="https://www.instagram.com/_dr.haf?igsh=cWk5cno5Nm14N2Uy" class="social-btn" style="background:#E1306C" id="sm-ig">Instagram</a>
+            <a href="https://www.facebook.com/share/1HvbknfUxz/" class="social-btn" style="background:#4267B2" id="sm-fb">Facebook</a>
+        </div>
+    </div>
+</div>
+
+<div id="registration-page">
+    <h2 style="color:var(--haf-green)" id="text-reg-title">Create a New Account in HAF 🥑</h2>
+    <input type="text" id="reg-name" class="form-input" placeholder="Full Name">
+    <input type="email" id="reg-email" class="form-input" placeholder="Email Address">
+    <button class="btn-pulse" onclick="saveUser()" id="text-submit-reg">Complete Registration</button>
+    <br><br>
+    <button onclick="goHome()" style="border:none; background:none; color:#777" id="text-back-home-1">Back to Home</button>
+</div>
+
+<div id="services-page">
+    <div class="haf-main-platform">
+        <div id="welcome-section" style="text-align: center; padding: 25px; background: #2d5a27; color: white; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+            <h2 style="margin: 0; font-size: 24px;"><span id="text-welcome-hero">Welcome,</span> <span id="haf_user_display">HAF Hero</span> 🥑</h2>
+            <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;" id="text-browse-services">Browse HAF 🥑 Services</p>
+        </div>
+
+        <div class="haf-grid">
+            <a href="https://hafgroup0.blogspot.com/p/body-margin-0-padding-20px-background.html" class="haf-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyTf3kwMcBEkf1MItp-rVIWtS1gqQ38yyO8N1HSTl9Laty2Iijs4ew_lJ4XhocgAEBBh0PF1Jmlijnv-d4gO-mJW0DRt-YeaaBznnAWIbrmZXFe9lRb2lEj-1JAMEB17N4rcyg4zBUQ8RSQ8V0q-n4sqoIiECxYVhtvYyKwEKSlwOnENqwXHBLv3mtfeU/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٥_%D٩%A٠%D٩%A٨%D٩%A٢%D٩%A٨%D٩%A٣%D٩%A٢.jpg">
+                <div class="haf-card-title" id="srv-1">HAF 🥑 Nutritional Calculator</div>
+            </a>
+            <a href="https://hafgroup0.blogspot.com/p/root-haf-green-2d5a27-haf-gold-d4af37_02072663684.html" class="haf-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSuZXHqaJp0e_cEBhLW6M90yEG_T2TX40euUG_trq3NVUNzv3ohnLF8TR6EOh9za26dwrkvCpnblGI_9jCFMlLILEQ2qogFxjSro8fLy0GR21xOkEwSI3pEOK2Vtz8LJH5kKeQgLW0SuhfFZs39BliSgc_SKPeGN1Q_ARYkJpH_rrQewle_2kt3Q0gjIY/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٧_%D٩%A٠%D٩%A٨%D٩%A٤%D٩%A٩%D٩%A١%D٩%A٤.jpg">
+                <div class="haf-card-title" id="srv-2">Get Your Advertising Space</div>
+            </a>
+            <a href="https://hafgroup0.blogspot.com/p/haf-root-haf-green-2d5a27-haf-gold_15.html" class="haf-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLt3HEB5POtiaC7voATvLMqNpgSo3c8vPUmvqTjiaMFlK5pdJoRZoqvUiyOZXC609_Dkiib4ZH-G9mZnVIwMi_0wA78J_twiAXVERHjBaeAOBITfun1D6kn6PVcUs59Gs_-uYk1FgcNacnWKFnOl8PAJ64bZ9SOOpD079o1CeKB5t_IwdSKcraeZ7gtJg/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٧_%D٩%A٠%D٩%A٨%D٩%A٣%D٩%A٩%D٩%A٤%D٩%A٢.jpg">
+                <div class="haf-card-title" id="srv-3">Know Your Body Type</div>
+            </a>
+            <a href="https://fitness0080.blogspot.com/2026/04/blog-post.html" class="haf-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhY_Y0XgWivEMsa_J2lEkos1o-bjEChm4QFOvPz74sKv5AmzjHEh3mpNCZbyt0VOlQWYD-a2uJHEULV_EASR2VQxvC6QKH8njJrkHUvU2xxEUqSKgV5Vt-4fwkRj4g9j7qcyzQailHjEn6LmX2ELx_Xz5ktdppjRo_26wOrNQUkiFfV4jz392W9FT5hK70/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٧_%D٩%A٠%D٩%A٨%D٩%A٤%D٩%A٦%D٩%A١%D٩%A٠.jpg">
+                <div class="haf-card-title" id="srv-4">Water Drinking Challenge</div>
+            </a>
+            <a href="https://hafgroup0.blogspot.com/p/root-haf-green-2d5a27-haf-gold-d4af37_0928722607.html" class="haf-card">
+    <div class="separator" style="clear: both; margin: 0; padding: 0;">
+        <img alt="" border="0" width="320" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjiETHYPx3Ed3OfcqZ5GTeC7Ln6DFGMn1yaI_tX29KXLeEwA6tzygGmZD9UhZMJC48bxMSS_VKdR9U87AEDLrdhMuZwQNzt4q-PmcDdiZk5myxUB9JKaxiK-v0uiRapbku9TKfjkm_aRwF0uw1xFymQ6DVb5FzqyJmfWBzSqS_rx5JM1nCGGhibecT-FFA/s320/IMG_%D9%A2%D9%A0%D9%A2%D9%A6%D9%A0%D9%A5%D9%A3%D9%A0_%D9%A0%D9%A9%D9%A5%D9%A7%D9%A5%D9%A4.jpg"/>
+    </div>
+              <div class="haf-card-title" id="srv-5">
+    <span style="display:inline-block; vertical-align:middle;">🥑</span> 
+    <span style="display:inline-block; vertical-align:middle;">باقات الاشتراك أون لاين</span>
+              </div>
+              
+              
+              
+</a>
+            <a href="https://hafgroup0.blogspot.com/p/root-haf-green-2d5a27-haf-gold-d4af37_01070402232.html" class="haf-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjyeyhQtbQF6FmlOFnLictcK8e3_LTgk3R-rWTbRQk77K3ABpfrs5p5QN9sp_-tnvGTqocYly3zLd3HqTjZtgW9eHEWVz4HNiupiaL3CzBqbAZf3YJqhbOmjEA-xfFohMMF1L50-oXZq6RLEkQwxIIKJw6F6k9rxLqewlOo79XYqJyIgHknbsVXL9rHr-E/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٧_%D٩%A٠%D٩%A٨%D٩%A٣%D٩%A٥%D٩%A٠%D٩%A٠.jpg">
+                <div class="haf-card-title" id="srv-6">HAF 🥑 Library</div>
+            </a>
+            <a href="https://hafgroup0.blogspot.com/p/root-haf-green-2d5a27-haf-gold-d4af37_16.html" class="haf-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg546HoDHGD7Pq9otgHOS2MSbPiGs6y7blsgL2JmYujLIiKv5YahyqREYLiDNIyu6I_Uz0rsNZFJyY2pbdZHVqPfjIJ6zsjskJ-zTj3C30gWMK96vR1pbk8_6O0mBzj0ixOXnlGhGzWY7ipxbnB9ayORTMiqtuac_GCRHxDtM6679PcTX2dp0u9oWJOjx0/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٧_%D٩%A٠%D٩%A٨%D٩%A٤%D٩%A٣%D٩%A٠%D٩%A٣.jpg">
+                <div class="haf-card-title" id="srv-7">HAF 🥑 Nutrition Articles</div>
+            </a>
+            <a href="https://hafgroup0.blogspot.com/p/blog-page_16.html" class="haf-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimGPnrdANo4_bXIZWQo-hm6A6mjo-WC3TovJw-M3adL8Jb1c1ColBBcZ_rsln2j3NqN0K5WD1OIJCYriYKSaavlO4m8VADv86QGun6hJs_sXFc9hPtMhsngIf9MYFTz4MOB-suCiN4kfPu3iyylMkqx6381Ma5LOhvDZLtfHGLDET0p4XrRunoakaAKwY/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٧_%D٩%A٠%D٩%A٧%D٩%A٥%D٩%A٩%D٩%A٤%D٩%A٦.jpg">
+                <div class="haf-card-title" id="srv-8">HAF 🥑 Workouts</div>
+            </a>
+            <a href="https://fitness0080.blogspot.com/2026/04/blog-post_17.html" class="haf-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhmvrwad3957bEl9PtQcg3YjoiFCRkkfbsDBNzr-InDdW0ONT8Fzf_nofmJtwLyAN8661eKRHdkqse3wbOd8ccDYJ1ipmgQGwvhdk0RtJU7edgLPdexxIa_osAnTRdqZY9QyJelvqqxu8LTe7uZFNysTaulpvFFasNpPCgagSo9eejgXz7GyqrINNzs9zk/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٧_%D٩%A٠%D٩%A٨%D٩%A٥%D٩%A٣%D٩%A٤%D٩%A٣.jpg">
+                <div class="haf-card-title" id="srv-9">HAF 🥑 Subscribers Follow-up Page</div>
+            </a>
+            <a href="https://hafgroup0.blogspot.com/p/blog-page_596.html" class="haf-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhL9tkwriQEDzIO2cSodVEv1dzGk4_Az4R2ANhUn7HtEaRZATlnpwon4hUuOZUGRuBQgjN54xEV7buqCoyeIqxG5oxHi_9mqXklHleztUJJn6D69y5evlQExIRRac-SmTw8238vWuHcgthmwPjjqPQi_sS5h7MzYq2BBBz_L9oIUOs98dCtuF8OhIUhlbI/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٧_%D٩%A٠%D٩%A٨%D٩%A٥%D٩%A١%D٩%A٢%D٩%A٢.jpg">
+                <div class="haf-card-title" id="srv-10">HAF 🥑 Training Courses</div>
+            </a>
+            
+            <a href="https://fitness0080.blogspot.com/p/haf-dr-haf.html" class="haf-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDqMMo-f11caRQBLcZWmCZ1xcVwpbwiOnzePValGk0h28n1lNAMtQsXNH82qiQJoOOx6hyphenhyphenVmKUFezqJBXKPdvpLy0xnkUj3hUrBa7m4QZlYSh0w-QKbDxmZyqMQLJU7H_Zj5aBNjemJoOx2EvtJJqpeQC6xl6engM2Arv9_TbS1a1XFW8WVhj6tjMylBM6/s400/IMG_%D9%A٢%D٩%A٠%D٩%A٢%D٩%A٦%D٩%A٠%D٩%A٥%D٩%A٠%D٩%A٨_%D٩%A١%D٩%A٤%D٩%A٥%D٩%A٦%D٩%A٠%D٩%A١.jpg">
+                <div class="haf-card-title" id="srv-11">Dr HAF 🥑 Tips</div>
+            </a>
+            <a href="https://hafgroup0.blogspot.com/p/haf-ai-assistant.html" class="haf-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgkP9T9_xvFZIpVM5gsc8DT-GnO1W9ySdruRLq53wu33N3bgDkX4GwyEORIvmJDhb54owE4taCHQ4eOtvkT_dEEx1818kYX8Rb4uJlu_jZ07pG-_mk5vQ2huI2cWNevnlNQxRB5Lix0XKbIUXICCvam-8J6MHcN8X80xPT-cqS-6caJTexGz5lNkVS0hFhk/s400/IMG_%D9%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٧_%D٩%A٠%D٩%A٨%D٩%A٥%D٩%A٣%D٩%A٤%D٩%A٣.jpg">
+                <div class="haf-card-title" id="srv-12">Chat with HAF 🥑 AI🤖</div>
+            </a>
+
+            <a href="https://hafgroup0.blogspot.com/p/blog-page_137.html" class="haf-card" style="grid-column: span 2; border: 2px solid #d4af37; background: #fffcf0;">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg546HoDHGD7Pq9otgHOS2MSbPiGs6y7blsgL2JmYujLIiKv5YahyqREYLiDNIyu6I_Uz0rsNZFJyY2pbdZHVqPfjIJ6zsjskJ-zTj3C30gWMK96vR1pbk8_6O0mBzj0ixOXnlGhGzWY7ipxbnB9ayORTMiqtuac_GCRHxDtM6679PcTX2dp0u9oWJOjx0/s400/IMG_%D٩%A٢%D٩%A٠%D٩%A٢%D٩%A٠%D٩%A٠%D٩%A٤%D٩%A١%D٩%A٧_%D٩%A٠%D٩%A٨%D٩%A٤%D٩%A٣%D٩%A٠%D٩%A٣.jpg">
+                <div class="haf-card-title" style="font-size: 16px;" id="srv-13">HAF technology 🥑🤖 Services</div>
+            </a>
+        </div>
+        <br>
+        <button onclick="goHome()" class="btn-pulse" style="width:100%" id="text-back-home-2">Back to Home</button>
+    </div>
+</div>
+
+<footer class="footer-container">
+    <div class="footer-links">
+        <a href="https://hafgroup0.blogspot.com/p/blog-page_731.html" id="ft-1">من نحن</a>
+        <a href="https://hafgroup0.blogspot.com/p/blog-page_530.html" id="ft-2">سياسة الخصوصية</a>
+        <a href="https://hafgroup0.blogspot.com/p/blog-page_844.html" id="ft-3">الشروط والأحكام</a>
+        <a href="https://hafgroup0.blogspot.com/p/blog-page_628.html" id="ft-4">سياسة الاسترداد</a>
+    </div>
+    <div class="footer-copyright" id="ft-copy">
+        &copy; 2026 جميع الحقوق محفوظة لـ منصة HAF 🥑 | تأسست في 2023
+    </div>
+</footer>
+
+<script>
+    const megaAdvices = [
+        "ابدأ وجبتك بالخضروات لتقليل ارتفاع سكر الدم.", "شرب الماء الفاتر صباحاً يحفز عملية الأيض.", "النوم 7 ساعات كفيل بضبط هرمونات الجوع.", "الكارديو يحرق السعرات، والمقاومة تنحت الجسم.", "السكر الأبيض عدو لدود لصحتك ومناعتك.", "المشي بعد الأكل بـ10 دقائق يحسن الهضم.", "البروتين هو حجر الأساس لبناء العضلات.", "الشوفان يمنحك شبعاً يدوم لساعات طويلة.", "لا تحرم نفسك، بل نظم كمياتك بذكاء.", "الاستمرارية تتفوق دائماً على الحماس المؤقت.",
+        "مضغ الطعام ببطء يقلل استهلاك السعرات.", "زيت الزيتون كنز لصحة قلبك وشرايينك.", "الجلوس بظهر مستقيم يحسن التنفس والحرق.", "الفواكه الكاملة أفضل بمراحل من العصائر.", "النتائج تأتي بالالتزام وليس بالتمني.", "فيتامين D ضروري جداً لخسارة الدهون.", "شرب 3 لتر ماء يومياً يطرد السموم.", "لا تقارن بدايتك بنهاية الآخرين، استمر.", "الوجبة المفتوحة ليست يوماً مفتوحاً.", "الوزن مجرد رقم، ركز على شكل جسمك.",
+        "الخضروات الورقية منجم للفيتامينات.", "قلل الملح لتجنب احتباس السوائل.", "تمارين التمدد تمنع الإصابات الرياضية.", "العضلات تحرق سعرات حتى وأنت نائم.", "الزبادي اليوناني وجبة بروتينية مثالية.", "تجنب الأكل قبل النوم بـ 3 ساعات.", "القهوة السوداء قبل التمرين تزيد النشاط.", "التنفس العميق يقلل التوتر وهرمون الكورتيزول.", "استبدل الخبز الأبيض بالخبز الأسمر.", "البيض أفضل خيار لإفطار رياضي متكامل.",
+        "المكسرات النيئة دهون صحية، لكن بحذر.", "صحة الأمعاء تبدأ من البروبيوتيك.", "ابتعد عن المشروبات الغازية تماماً.", "عضلات البطن تظهر في المطبخ أولاً.", "الدرج بديل رائع لتمارين الكارديو.", "القرفة تساعد في ضبط مستويات الأنسولين.", "لا تهمل وجبة الإفطار، فهي وقود يومك.", "الشاي الأخضر يعزز الحرق بشكل طفيف.", "اجعل الرياضة جزءاً من يومك لا عبئاً.", "التفاح يسد الشهية بفضل أليافه العالية.",
+        "المسافة بينك وبين هدفك هي 'الصبر'.", "المكملات تكمل النقص ولا تعوض الأكل.", "الماء هو أرخص وأقوى حارق دهون.", "الثوم يقوي المناعة ويحسن ضغط الدم.", "تجنب الزيوت المهدرجة والمقليات.", "الموز طاقة فورية قبل التمارين الشاقة.", "اللتزام ببرمجة السعرات هو سر النجاح.", "عقلك يحتاج للراحة بقدر عضلاتك.", "الدهون لا تتحول لعضلات، ركز في هدفك.", "التمارين المنزلية فعالة جداً إذا التزمت.",
+        "البطاطا الحلوة كربوهيدرات معقدة ممتازة.", "اشرب كوب ماء عند الشعور بجوع مفاجئ.", "المنصات الإلكترونية مثل HAF هي مستشارك.", "العدس مصدر بروتين نباتي واقتصادي.", "لا تتمرن وأنت مصاب، استمع لجسمك.", "الرياضة تفرز هرمونات السعادة، جربها.", "كن فخوراً بكل خطوة تخطوها للأمام.", "الماء بالليمون ينعش جسمك وينظفه.", "الخلل في يوم واحد لا يعني فشل النظام.", "التخطيط لوجباتك يوفر عليك التخبيص.",
+        "البشرة الصحية تبدأ من الداخل أولاً.", "بذور الشيا منجم للأوميغا 3 والألياف.", "التمارين المركبة تحرق سعرات أكثر.", "الكركم مضاد التهاب طبيعي جبار.", "لا تنسَ شرب الماء أثناء التمرين.", "التوازن هو مفتاح الحياة الصحية.", "الدايت ليس عقاباً، بل أسلوب حياة.", "كن صبوراً، فالجسم لا يتغير في ليلة.", "ابتسم، فالحالة النفسية تؤثر على حرقك.", "النشاط الحركي اليومي أهم من ساعة الجيم.",
+        "البروكلي صديق رائع لمتبعي الحمية.", "الفلفل الحار يرفع معدل الأيض مؤقتاً.", "تجنب الصلصات الجاهزة فهي مليئة بالسكر.", "السمك المشوي وجبة مثالية لقلبك.", "صنف أكلك بذكاء: بروتين، كرب، دهون.", "ابتعد عن التوتر، فهو يخزن دهون البطن.", "تحديات HAF تجعلك بطلاً حقيقياً.", "اجعل الماء رفيقك في كل مكان وزمان.", "الثبات على المبدأ يوصلك للقمة حتماً.", "الخيار وجبة خفيفة مثالية وبلا سعرات.",
+        "الفاصوليا السوداء غنية بالألياف والبروتين.", "التزم بمواعيد ثابتة لأكلك ونومك.", "كلما قل المكونات في المعلبات، كانت أصح.", "بناء العضلات يزيد من سرعة حرقك.", "العسل الطبيعي بديل ذكي للسكر ولكن بوعي.", "التنوع في الأكل يضمن وصول الفيتامينات.", "لا تذهب للتسوق وأنت جائع أبداً.", "الرياضة الصباحية تمنحك طاقة ليومك.", "حافظ على مرونة جسمك بتمارين الاستطالة.", "الدهون الصحية ضرورية لامتصاص الفيتامينات.",
+        "السبانخ تمنحك القوة والحديد اللازم.", "الماء هو سر نضارة بشرتك وشبابك.", "كل بذكاء لتعيش بجمال، أنت بطل HAF.", "تجنب الأطعمة المصنعة واللانشون.", "الرياضة قبل الإفطار تحفز حرق الدهون.", "تحدي نفسك كل يوم لتكون نسخة أفضل.", "التوقف عن السكر يغير حياتك للأبد.", "الصحة هي الثروة الحقيقية، حافظ عليها.", "اعتمد على الغذاء الطبيعي قدر الإمكان.", "أنت ما تأكله، فاختر الأفضل لجسمك."
+    ];
+
+    const megaAdvicesEn = [
+        "Start your meal with vegetables to reduce blood sugar spikes.", "Drinking lukewarm water in the morning boosts metabolism.", "7 hours of sleep is enough to regulate hunger hormones.", "Cardio burns calories, while resistance training sculpts the body.", "White sugar is a fierce enemy to your health and immunity.", "Walking 10 minutes after eating improves digestion.", "Protein is the foundation for building muscle.", "Oats give you fullness that lasts for hours.", "Don't deprive yourself, manage your portions smartly.", "Consistency always beats temporary enthusiasm.",
+        "Chew food slowly to reduce calorie intake.", "Olive oil is a treasure for your heart and arteries.", "Sitting with a straight back improves breathing and burning.", "Whole fruits are much better than juices.", "Results come from commitment, not wishing.", "Vitamin D is essential for fat loss.", "Drinking 3 liters of water daily flushes out toxins.", "Don't compare your beginning to someone else's end, keep going.", "An open meal is not an open day.", "Weight is just a number, focus on your body shape.",
+        "Green leafy vegetables are a goldmine of vitamins.", "Reduce salt to avoid water retention.", "Stretching exercises prevent sports injuries.", "Muscles burn calories even while you sleep.", "Greek yogurt is a perfect protein snack.", "Avoid eating 3 hours before bedtime.", "Black coffee before exercise increases activity.", "Deep breathing reduces stress and cortisol hormone.", "Replace white bread with brown bread.", "Eggs are the best choice for a complete athletic breakfast.",
+        "Raw nuts are healthy fats, but use with caution.", "Gut health starts with probiotics.", "Stay away from carbonated drinks completely.", "Abs are made in the kitchen first.", "Stairs are a great alternative to cardio.", "Cinnamon helps regulate insulin levels.", "Don't skip breakfast, it's the fuel of your day.", "Green tea slightly boosts metabolism.", "Make sports a part of your day, not a burden.", "Apples suppress appetite thanks to their high fiber.",
+        "The distance between you and your goal is 'patience'.", "Supplements complete the deficiency, they don't replace food.", "Water is the cheapest and most powerful fat burner.", "Garlic strengthens immunity and improves blood pressure.", "Avoid hydrogenated oils and fried foods.", "Bananas are instant energy before heavy workouts.", "Adhering to calorie programming is the secret to success.", "Your mind needs rest as much as your muscles.", "Fat does not turn into muscle, focus on your goal.", "Home workouts are very effective if you commit.",
+        "Sweet potatoes are an excellent complex carbohydrate.", "Drink a glass of water when you feel sudden hunger.", "Digital platforms like HAF are your consultant.", "Lentils are a plant-based and economical protein source.", "Don't exercise while injured, listen to your body.", "Sports release happiness hormones, try it.", "Be proud of every step you take forward.", "Water with lemon refreshes and cleanses your body.", "An error in one day does not mean the system has failed.", "Planning your meals saves you from cheating.",
+        "Healthy skin starts from within first.", "Chia seeds are a mine of omega-3 and fiber.", "Compound exercises burn more calories.", "Turmeric is a powerful natural anti-inflammatory.", "Don't forget to drink water during exercise.", "Balance is the key to a healthy life.", "Diet is not a punishment, it's a lifestyle.", "Be patient, the body doesn't change overnight.", "Smile, your psychological state affects your burning.", "Daily physical activity is more important than an hour at the gym.",
+        "Broccoli is a great friend for dieters.", "Chili pepper temporarily raises metabolic rate.", "Avoid ready-made sauces, they are full of sugar.", "Grilled fish is a perfect meal for your heart.", "Classify your food smartly: protein, carb, fat.", "Stay away from stress, it stores belly fat.", "HAF challenges make you a real hero.", "Make water your companion everywhere and every time.", "Sticking to the principle brings you to the top.", "Cucumber is an ideal snack with zero calories.",
+        "Black beans are rich in fiber and protein.", "Commit to fixed times for your food and sleep.", "The fewer ingredients in canned food, the healthier.", "Building muscle increases your burning rate.", "Natural honey is a smart substitute for sugar, but mindfully.", "Variety in food ensures the delivery of vitamins.", "Never go shopping when you are hungry.", "Morning exercise gives you energy for your day.", "Maintain your body flexibility with stretching exercises.", "Healthy fats are essential for vitamin absorption.",
+        "Spinach gives you the necessary strength and iron.", "Water is the secret to your skin's freshness and youth.", "Eat smart to live beautifully, you are a HAF hero.", "Avoid processed foods and lunch meat.", "Exercise before breakfast stimulates fat burning.", "Challenge yourself every day to be a better version.", "Stopping sugar changes your life forever.", "Health is the real wealth, protect it.", "Rely on natural food as much as possible.", "You are what you eat, so choose the best for your body."
+    ];
+
+    let currentLang = 'en';
+
+    const translations = {
+        ar: {
+            langBtn: "English",
+            mainTitle: "مرحباً بك في عالم HAF 🥑 الغذائي الإلكتروني",
+            girlsResults: "🌸 نتائج البطلات",
+            boysResults: "🏆 نتائج الأبطال",
+            capsule: "💡 كبسولة HAF المعرفية",
+            shareBtn: "🔗 مشاركة النصيحة",
+            regBtn: "إنضم لعائلة HAF 🥑",
+            servicesBtn: "الدخول لخدماتك 📲",
+            featuresHeading: "مميزات منصة HAF 🥑 الغذائية 📲:",
+            featuresList: `<li>تطبيق حاسبة HAF 🥑 الغذائية 📲</li><li>متجر HAF 🥑 الرياضي الالكتروني 🏆</li><li>مكتبة HAF 🥑 للمعرفه الغذائية</li><li>تقدم المعلومات الغذائيه منذ 1 فبراير 2023</li><li>مدونة منصة HAF 🥑 الغذائية على جوجل</li><li>اول منصه غذائيه الالكترونيه بمميزات حديثه</li><li>صفحة متابعه الكترونيه لعملاء HAF 🥑</li><li>صفحة تسجيل متقدمه</li><li>موقع HAF 🥑 الغذائي يتيح الخدمات بضغطة زر</li>`,
+            socialHeading: "تابعونا على جميع مواقع التواصل الاجتماعي",
+            smWa: "واتساب", smYt: "يوتيوب", smTg: "تليجرام", smIg: "انستجرام", smFb: "فيسبوك",
+            regTitle: "إنشاء حساب جديد في HAF 🥑",
+            submitReg: "إتمام التسجيل",
+            backHome1: "العودة للرئيسية", backHome2: "العودة للرئيسية",
+            welcomeHero: "أهلاً يا",
+            browseServices: "تصفح خدمات HAF 🥑",
+            adTag: "إعلان ممول",
+            adDesc1: "انضم لمكتبة متنوعة من الكتب الإلكترونية المجانية",
+            adBtn1: "اضغط هنا للذهاب للمكتبة",
+            adTitle2: "أمل بوتيك للتسوق الإلكتروني",
+            adDesc2: "إليكِ خدمة تليق بكِ",
+            adBtn2: "اضغط هنا للانتقال للبوتيك",
+            loadingText: "جاري حفظ بياناتك في HAF... 🥑",
+            welcomeBack: "مرحباً بك مجدداً يا ",
+            fallbackHero: "بطل HAF",
+            srv1: "حاسبة HAF 🥑 الغذائية", srv2: "إحصل على مساحتك الإعلانية", srv3: "اعرف نوع جسمك", srv4: "تحدي شرب الماء", srv5: "متجر HAF 🥑", srv6: "مكتبة HAF 🥑", srv7: "مقالات HAF 🥑 الغذائية", srv8: "تمارين HAF 🥑", srv9: "صفحة متابعة مشتركين HAF 🥑", srv10: "دورات HAF 🥑 التدريبية", srv11: "نصائح Dr HAF 🥑", srv12: "تحدث مع HAF 🥑 AI🤖", srv13: "خدمات HAF technology 🥑🤖",
+            ticker: "منصة HAF 🥑 الغذائية اول منصه غذائيه الاكترونيه في اليمن ..HAF 🥑 .. خدمات غذائيه الالكترونيه 📲 متنوعه .. HAF 🥑.. حياه صحيه ووزن مثالي بضغطة زر 📲.. HAF 🥑 .. مكتبة HAF 🥑 الغذائية تضع المعرفه الغذائيه بين يديك ..HAF 🥑.. الرياضه المنزليه أصبحت سهله مع متجر HAF 🥑 store 🛒 الرياضي .. HAF 🥑 .. خدمات HAF 🥑 الالكترونيه 📲",
+            ft1: "من نحن", ft2: "سياسة الخصوصية", ft3: "الشروط والأحكام", ft4: "سياسة الاسترداد", ftCopy: "© 2026 جميع الحقوق محفوظة لـ منصة HAF 🥑 | تأسست في 2023"
+        },
+        en: {
+            langBtn: "العربية",
+            mainTitle: "Welcome to HAF 🥑 Electronic Nutrition World",
+            girlsResults: "🌸 Heroines Results",
+            boysResults: "🏆 Heroes Results",
+            capsule: "💡 HAF Knowledge Capsule",
+            shareBtn: "🔗 Share Advice",
+            regBtn: "Join HAF 🥑 Family",
+            servicesBtn: "Access Your Services 📲",
+            featuresHeading: "Features of HAF 🥑 Nutrition Platform 📲:",
+            featuresList: `<li>HAF 🥑 Nutritional Calculator App 📲</li><li>HAF 🥑 Online Sports Store 🏆</li><li>HAF 🥑 Library for Nutritional Knowledge</li><li>Providing nutritional info since February 1, 2023</li><li>HAF 🥑 Nutrition Platform Blog on Google</li><li>The first electronic nutrition platform with modern features</li><li>Electronic follow-up page for HAF 🥑 clients</li><li>Advanced registration page</li><li>HAF 🥑 Nutrition website provides services at the click of a button</li>`,
+            socialHeading: "Follow us on all social media platforms",
+            smWa: "WhatsApp", smYt: "YouTube", smTg: "Telegram", smIg: "Instagram", smFb: "Facebook",
+            regTitle: "Create a New Account in HAF 🥑",
+            submitReg: "Complete Registration",
+            backHome1: "Back to Home", backHome2: "Back to Home",
+            welcomeHero: "Welcome,",
+            browseServices: "Browse HAF 🥑 Services",
+            adTag: "Sponsored Ad",
+            adDesc1: "Join a diverse library of free electronic books",
+            adBtn1: "Click here to go to the library",
+            adTitle2: "Amal Boutique for E-Shopping",
+            adDesc2: "A service that suits you",
+            adBtn2: "Click here to move to the boutique",
+            loadingText: "Saving your data in HAF... 🥑",
+            welcomeBack: "Welcome back, ",
+            fallbackHero: "HAF Hero",
+            srv1: "HAF 🥑 Nutritional Calculator", srv2: "Get Your Advertising Space", srv3: "Know Your Body Type", srv4: "Water Drinking Challenge", srv5: "HAF 🥑 Store", srv6: "HAF 🥑 Library", srv7: "HAF 🥑 Nutrition Articles", srv8: "HAF 🥑 Workouts", srv9: "HAF 🥑 Subscribers Follow-up Page", srv10: "HAF 🥑 Training Courses", srv11: "Dr HAF 🥑 Tips", srv12: "Chat with HAF 🥑 AI🤖", srv13: "HAF technology 🥑🤖 Services",
+            ticker: "HAF 🥑 Nutrition Platform is the first electronic nutrition platform in Yemen .. HAF 🥑 .. Diverse electronic nutritional services 📲 .. HAF 🥑 .. Healthy life and perfect weight at the push of a button 📲 .. HAF 🥑 .. HAF 🥑 Library puts nutritional knowledge in your hands .. HAF 🥑 .. Home sports made easy with HAF 🥑 store 🛒 .. HAF 🥑 .. HAF 🥑 Electronic services 📲",
+            ft1: "About Us", ft2: "Privacy Policy", ft3: "Terms and Conditions", ft4: "Refund Policy", ftCopy: "© 2026 All rights reserved to HAF 🥑 Platform | Established in 2023"
+        }
+    };
+
+    function toggleLanguage() {
+        currentLang = (currentLang === 'ar') ? 'en' : 'ar';
+        const htmlTag = document.documentElement;
+        if (currentLang === 'en') {
+            htmlTag.setAttribute('lang', 'en');
+            htmlTag.setAttribute('dir', 'ltr');
+        } else {
+            htmlTag.setAttribute('lang', 'ar');
+            htmlTag.setAttribute('dir', 'rtl');
+        }
+        applyTranslations();
+    }
+
+    function applyTranslations() {
+        document.getElementById('lang-btn').innerText = translations[currentLang].langBtn;
+        document.getElementById('text-main-title').innerText = translations[currentLang].mainTitle;
+        document.getElementById('text-girls-results').innerText = translations[currentLang].girlsResults;
+        document.getElementById('text-boys-results').innerText = translations[currentLang].boysResults;
+        document.getElementById('text-capsule').innerText = translations[currentLang].capsule;
+        document.getElementById('text-share-btn').innerText = translations[currentLang].shareBtn;
+        document.getElementById('text-reg-btn').innerText = translations[currentLang].regBtn;
+        document.getElementById('text-services-btn').innerText = translations[currentLang].servicesBtn;
+        document.getElementById('text-features-heading').innerText = translations[currentLang].featuresHeading;
+        document.getElementById('text-features-list').innerHTML = translations[currentLang].featuresList;
+        document.getElementById('text-social-heading').innerText = translations[currentLang].socialHeading;
+        document.getElementById('sm-wa').innerText = translations[currentLang].smWa;
+        document.getElementById('sm-yt').innerText = translations[currentLang].smYt;
+        document.getElementById('sm-tg').innerText = translations[currentLang].smTg;
+        document.getElementById('sm-ig').innerText = translations[currentLang].smIg;
+        document.getElementById('sm-fb').innerText = translations[currentLang].smFb;
+        document.getElementById('text-reg-title').innerText = translations[currentLang].regTitle;
+        document.getElementById('text-submit-reg').innerText = translations[currentLang].submitReg;
+        document.getElementById('text-back-home-1').innerText = translations[currentLang].backHome1;
+        document.getElementById('text-back-home-2').innerText = translations[currentLang].backHome2;
+        
+        document.getElementById('reg-name').placeholder = (currentLang === 'en') ? "Full Name" : "الاسم الكامل";
+        document.getElementById('reg-email').placeholder = (currentLang === 'en') ? "Email Address" : "البريد الإلكتروني";
+        
+        document.getElementById('text-welcome-hero').innerText = translations[currentLang].welcomeHero;
+        document.getElementById('text-browse-services').innerText = translations[currentLang].browseServices;
+        document.getElementById('text-ad-tag').innerText = translations[currentLang].adTag;
+        document.getElementById('ad-desc-1').innerText = translations[currentLang].adDesc1;
+        document.getElementById('ad-btn-1').innerText = translations[currentLang].adBtn1;
+        document.getElementById('ad-title-2').innerText = translations[currentLang].adTitle2;
+        document.getElementById('ad-desc-2').innerText = translations[currentLang].adDesc2;
+        document.getElementById('ad-btn-2').innerText = translations[currentLang].adBtn2;
+        document.getElementById('loading').innerText = translations[currentLang].loadingText;
+        document.getElementById('srv-1').innerText = translations[currentLang].srv1; document.getElementById('srv-2').innerText = translations[currentLang].srv2; document.getElementById('srv-3').innerText = translations[currentLang].srv3; document.getElementById('srv-4').innerText = translations[currentLang].srv4; document.getElementById('srv-5').innerText = translations[currentLang].srv5; document.getElementById('srv-6').innerText = translations[currentLang].srv6; document.getElementById('srv-7').innerText = translations[currentLang].srv7; document.getElementById('srv-8').innerText = translations[currentLang].srv8; document.getElementById('srv-9').innerText = translations[currentLang].srv9; document.getElementById('srv-10').innerText = translations[currentLang].srv10; document.getElementById('srv-11').innerText = translations[currentLang].srv11; document.getElementById('srv-12').innerText = translations[currentLang].srv12; document.getElementById('srv-13').innerText = translations[currentLang].srv13;
+        document.getElementById('text-ticker').innerText = translations[currentLang].ticker;
+        
+        // Footer Translations
+        document.getElementById('ft-1').innerText = translations[currentLang].ft1;
+        document.getElementById('ft-2').innerText = translations[currentLang].ft2;
+        document.getElementById('ft-3').innerText = translations[currentLang].ft3;
+        document.getElementById('ft-4').innerText = translations[currentLang].ft4;
+        document.getElementById('ft-copy').innerText = translations[currentLang].ftCopy;
+
+        getRandomAdvice();
+        const savedName = localStorage.getItem('haf_active_user');
+        if (savedName) {
+            document.getElementById('welcome-personal-msg').innerText = translations[currentLang].welcomeBack + savedName + " 🥑";
+            document.getElementById('haf_user_display').innerText = savedName;
+        } else {
+            document.getElementById('haf_user_display').innerText = translations[currentLang].fallbackHero;
+        }
+    }
+
+    function initPage() {
+        currentLang = 'en';
+        document.documentElement.setAttribute('lang', 'en');
+        document.documentElement.setAttribute('dir', 'ltr');
+        applyTranslations();
+        
+        const savedName = localStorage.getItem('haf_active_user');
+        if (savedName) {
+            document.getElementById('welcome-personal-msg').style.display = 'block';
+        }
+    }
+
+    function getRandomAdvice() {
+        const sourceList = (currentLang === 'ar') ? megaAdvices : megaAdvicesEn;
+        const index = Math.floor(Math.random() * sourceList.length);
+        document.getElementById('advice-content').innerText = sourceList[index];
+    }
+
+    async function copyAdvice() {
+        const text = document.getElementById('advice-content').innerText;
+        const footerTag = (currentLang === 'ar') ? " \n\nنصيحة من منصة HAF 🥑 الغذائية\nرابط المنصة: " : " \n\nAdvice from HAF 🥑 Nutrition Platform\nPlatform Link: ";
+        const fullText = text + footerTag + window.location.href;
+        if (navigator.share) {
+            try { await navigator.share({ title: (currentLang === 'ar') ? 'نصيحة من منصة HAF 🥑' : 'Advice from HAF 🥑', text: fullText, url: window.location.href }); } catch (err) {}
+        } else {
+            navigator.clipboard.writeText(fullText).then(() => {
+                alert((currentLang === 'ar') ? "تم نسخ النصيحة! 🥑✅" : "Advice copied! 🥑✅");
+            });
+        }
+    }
+
+    let currentSlide = 0;
+    const slides = document.getElementById('slides');
+    setInterval(() => { currentSlide = (currentSlide + 1) % 4; slides.style.transform = `translateX(-${currentSlide * 100}%)`; }, 3000);
+
+    let currentAd = 0;
+    const ads = document.querySelectorAll('.ad-item');
+    setInterval(() => { ads[currentAd].classList.remove('active'); currentAd = (currentAd + 1) % ads.length; ads[currentAd].classList.add('active'); }, 5000);
+
+    function goToRegistration() { document.getElementById('home-page').style.display = 'none'; document.getElementById('registration-page').style.display = 'block'; }
+    function showServicesPage() { document.getElementById('home-page').style.display = 'none'; document.getElementById('services-page').style.display = 'block'; }
+    function goHome() { document.getElementById('registration-page').style.display = 'none'; document.getElementById('services-page').style.display = 'none'; document.getElementById('home-page').style.display = 'block'; }
+
+    function saveUser() {
+        const name = document.getElementById('reg-name').value;
+        const email = document.getElementById('reg-email').value;
+        const loading = document.getElementById('loading');
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbx8PZhRs30Js01UPejrigMcWoe4B5NCndAqppx86H_3TTuMErzyyMheNaiv-B9eSz-Q/exec';
+        if(name && email) {
+            loading.style.display = 'flex'; 
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ name: name, email: email }) })
+            .then(() => {
+                loading.style.display = 'none';
+                localStorage.setItem('haf_active_user', name);
+                alert((currentLang === 'ar') ? "تم التسجيل بنجاح!" : "Registered successfully!");
+                location.reload();
+            })
+            .catch(() => { loading.style.display = 'none'; alert("Error"); });
+        } else { alert("Please enter your data"); }
+    }
+</script>
+</body>
+</html>
