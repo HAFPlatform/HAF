@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة HAF 🥑 الغذائية الإلكترونية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1b5e20">
+<link rel="apple-touch-icon" href="/HAF/1795465497268.jpg">
+
     <style>
         :root { --haf-green: #2d5a27; --haf-gold: #d4af37; --bg: #fdfbf7; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; color: #333; overflow-x: hidden; }
@@ -597,5 +601,13 @@
         } else { alert("Please enter your data"); }
     }
 </script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js');
+    });
+  }
+</script>
+
 </body>
 </html>
