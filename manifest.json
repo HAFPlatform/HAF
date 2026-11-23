@@ -1,0 +1,27 @@
+{
+  "name": "HAF 🥑 - منصة التغذية واللياقة",
+  "short_name": "HAF 🥑",
+  "description": "حاسبة السعرات والماكروز، الأنظمة الغذائية المحسوبة، وبرامج التمارين الرياضية من منصة HAF الغذائية.",
+  "start_url": "/HAF/index.html",
+  "scope": "/HAF/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#1b5e20",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "/HAF/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/HAF/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
