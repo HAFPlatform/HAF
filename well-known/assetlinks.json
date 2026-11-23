@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.hafplatform.twa",
+    "sha256_cert_fingerprints":
+    ["18:E8:02:0D:51:18:8E:50:88:64:93:C5:3D:6A:96:9B:06:A5:94:29:A2:C7:31:B9:9E:0A:C5:69:44:8A:BD:2D"]
+  }
+}]
